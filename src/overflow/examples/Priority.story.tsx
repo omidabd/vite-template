@@ -1,9 +1,10 @@
 // Replace your-framework with the name of your framework
 import type { Meta, StoryObj } from '@storybook/react';
-import { Simple, SimpleEx } from './Simple';
+import { Button, Menu, Stack, Tooltip } from '@mantine/core';
+import { Priority } from './Priority';
 
-const meta: Meta<typeof Simple> = {
-  component: Simple,
+const meta: Meta<typeof Priority> = {
+  component: Priority,
   title: 'Overflow',
   parameters: {
     controls: { expanded: true },
@@ -49,13 +50,7 @@ const meta: Meta<typeof Simple> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Simple>;
+type Story = StoryObj<typeof Priority>;
 
 //👇 Throws a type error if the args don't match the component props
-export const Simple1: Story = {};
-
-export const Simple2: Story = {
-  render: () => {
-    return <SimpleEx />;
-  },
-};
+export const WithPriority: Story = {};

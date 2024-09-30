@@ -1,89 +1,112 @@
-import * as React from 'react';
+import React from 'react';
 import clsx from 'clsx';
-import { Button, Menu } from '@mantine/core';
+import { Button, Divider, Menu } from '@mantine/core';
 import { Overflow, OverflowProps } from '../components/Overflow';
 import { OverflowItem, OverflowItemProps } from '../components/OverflowItem';
+import { useIsOverflowGroupVisible } from '../useIsOverflowGroupVisible';
 import { useIsOverflowItemVisible } from '../useIsOverflowItemVisible';
 import { useOverflowMenu } from '../useOverflowMenu';
 import classes from './all.module.css';
 
-export const Simple = (props: Omit<OverflowProps, 'children'>) => {
-  const itemIds = new Array(8).fill(0).map((_, i) => i.toString());
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const Dividers = (props: Omit<OverflowProps, 'children'>) => {
   return (
     <Overflow {...props}>
       <div className={clsx(classes.container, classes.resizableArea)}>
-        {itemIds.map((i) => (
-          <OverflowItem key={i} id={i}>
-            <Button variant="outline" miw="min-content">
-              Item {i}
-            </Button>
-          </OverflowItem>
-        ))}
-        <OverflowMenu itemIds={itemIds} />
+        <OverflowItem id="1" groupId="1">
+          <Button variant="default" miw="min-content">
+            Item 1
+          </Button>
+        </OverflowItem>
+        <OverflowGroupDivider groupId="1" />
+        <OverflowItem id="2" groupId="2">
+          <Button variant="default" miw="min-content">
+            Item 2
+          </Button>
+        </OverflowItem>
+        <OverflowGroupDivider groupId="2" />
+        <OverflowItem id="3" groupId="3">
+          <Button variant="default" miw="min-content">
+            Item 3
+          </Button>
+        </OverflowItem>
+        <OverflowItem id="4" groupId="3">
+          <Button variant="default" miw="min-content">
+            Item 4
+          </Button>
+        </OverflowItem>
+        <OverflowGroupDivider groupId="3" />
+        <OverflowItem id="5" groupId="4">
+          <Button variant="default" miw="min-content">
+            Item 5
+          </Button>
+        </OverflowItem>
+        <OverflowItem id="6" groupId="4">
+          <Button variant="default" miw="min-content">
+            Item 6
+          </Button>
+        </OverflowItem>
+        <OverflowItem id="7" groupId="4">
+          <Button variant="default" miw="min-content">
+            Item 7
+          </Button>
+        </OverflowItem>
+        <OverflowGroupDivider groupId="4" />
+        <OverflowItem id="8" groupId="5">
+          <Button variant="default" miw="min-content">
+            Item 8
+          </Button>
+        </OverflowItem>
+        <OverflowMenu
+          itemIds={[
+            '1',
+            'divider-1',
+            '2',
+            'divider-2',
+            '3',
+            '4',
+            'divider-3',
+            '5',
+            '6',
+            '7',
+            'divider-4',
+            '8',
+          ]}
+        />
       </div>
     </Overflow>
   );
 };
 
-export const SimpleEx = (props: Omit<OverflowProps, 'children'>) => {
-  const itemIds = new Array(8).fill(0).map((_, i) => i.toString());
+const OverflowGroupDivider: React.FC<{
+  groupId: string;
+}> = (props) => {
+  const isGroupVisible = useIsOverflowGroupVisible(props.groupId);
 
+  if (isGroupVisible === 'hidden') {
+    return null;
+  }
+
+  // return (
+  //   <div
+  //     style={{
+  //       flexGrow: 0,
+  //       // marginInline: '4px',
+  //       width: 3,
+  //       minWidth: 3,
+  //       backgroundColor: 'red',
+  //     }}
+  //   />
+  // );
   return (
-    <Overflow {...props}>
-      <div className={clsx(classes.container, classes.resizableArea)}>
-        {itemIds.map((i) => (
-          <OverflowItem key={i} id={i}>
-            <Button variant="default" miw="min-content">
-              Item {i}
-            </Button>
-          </OverflowItem>
-        ))}
-        {/*  
-        <OverflowItem id="1">
-          <Button variant="default" miw="min-content">
-            Item 1
-          </Button>
-        </OverflowItem>
-        <OverflowItem id="2">
-          <Button variant="default" miw="min-content">
-            Item 2
-          </Button>
-        </OverflowItem>
-        <OverflowItem id="3">
-          <Button variant="default" miw="min-content">
-            Item 3
-          </Button>
-        </OverflowItem>
-        <OverflowItem id="4">
-          <Button variant="default" miw="min-content">
-            Item 4
-          </Button>
-        </OverflowItem>
-        <OverflowItem id="5">
-          <Button variant="default" miw="min-content">
-            Item 5
-          </Button>
-        </OverflowItem>
-        <OverflowItem id="6">
-          <Button variant="default" miw="min-content">
-            Item 6
-          </Button>
-        </OverflowItem>
-        <OverflowItem id="7">
-          <Button variant="default" miw="min-content">
-            Item 7
-          </Button>
-        </OverflowItem>
-        <OverflowItem id="8">
-          <Button variant="default" miw="min-content">
-            Item 8
-          </Button>
-        </OverflowItem>
-        <OverflowMenu itemIds={['1', '2', '3', '4', '5', '6', '7', '8']} /> 
-        */}
-        <OverflowMenu itemIds={itemIds} />
-      </div>
-    </Overflow>
+    <Divider
+      orientation="vertical"
+      size="md"
+      // style={{
+      //   flexGrow: 0,
+      //   marginInline: '4px',
+      // }}
+    />
   );
 };
 
@@ -132,9 +155,27 @@ const OverflowMenu: React.FC<{ itemIds: string[] }> = ({ itemIds }) => {
 
       <Menu.Dropdown>
         {itemIds.map((i) => {
+          // This is purely a simplified convention for documentation examples
+          // Could be done in other ways too
+          if (typeof i === 'string' && i.startsWith('divider')) {
+            const groupId = i.split('-')[1];
+            return <OverflowMenuDivider key={i} id={groupId} />;
+          }
           return <OverflowMenuItem key={i} id={i} />;
         })}
       </Menu.Dropdown>
     </Menu>
   );
+};
+
+const OverflowMenuDivider: React.FC<{
+  id: string;
+}> = (props) => {
+  const isGroupVisible = useIsOverflowGroupVisible(props.id);
+
+  if (isGroupVisible === 'visible') {
+    return null;
+  }
+
+  return <Menu.Divider />;
 };

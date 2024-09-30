@@ -1,13 +1,13 @@
-import { DATA_OVERFLOWING, DATA_OVERFLOW_GROUP } from './consts';
+import { DATA_OVERFLOW_GROUP, DATA_OVERFLOWING } from './consts';
 import { observeResize } from './createResizeObserver';
 import { debounce } from './debounce';
 import { createPriorityQueue, PriorityQueue } from './priorityQueue';
 import type {
+  ObserveOptions,
+  OverflowDividerEntry,
   OverflowGroupState,
   OverflowItemEntry,
   OverflowManager,
-  ObserveOptions,
-  OverflowDividerEntry,
 } from './types';
 
 /**
@@ -27,6 +27,7 @@ export function createOverflowManager(): OverflowManager {
   let forceDispatch = true;
   const options: Required<ObserveOptions> = {
     padding: 10,
+    gap: 4,
     overflowAxis: 'horizontal',
     overflowDirection: 'end',
     minimumVisible: 0,
@@ -38,7 +39,10 @@ export function createOverflowManager(): OverflowManager {
   const overflowDividers: Record<string, OverflowDividerEntry> = {};
   let disposeResizeObserver: () => void = () => null;
 
-  const getNextItem = (queueToDequeue: PriorityQueue<string>, queueToEnqueue: PriorityQueue<string>) => {
+  const getNextItem = (
+    queueToDequeue: PriorityQueue<string>,
+    queueToEnqueue: PriorityQueue<string>
+  ) => {
     const nextItem = queueToDequeue.dequeue();
     queueToEnqueue.enqueue(nextItem);
     return overflowItems[nextItem];
@@ -59,7 +63,9 @@ export function createOverflowManager(): OverflowManager {
     }
 
     const positionStatusBit =
-      options.overflowDirection === 'end' ? Node.DOCUMENT_POSITION_FOLLOWING : Node.DOCUMENT_POSITION_PRECEDING;
+      options.overflowDirection === 'end'
+        ? Node.DOCUMENT_POSITION_FOLLOWING
+        : Node.DOCUMENT_POSITION_PRECEDING;
 
     // eslint-disable-next-line no-bitwise
     return lte.element.compareDocumentPosition(rte.element) & positionStatusBit ? 1 : -1;
@@ -68,7 +74,7 @@ export function createOverflowManager(): OverflowManager {
   function getElementAxisSize(
     horizontal: 'clientWidth' | 'offsetWidth',
     vertical: 'clientHeight' | 'offsetHeight',
-    el: HTMLElement,
+    el: HTMLElement
   ): number {
     if (!sizeCache.has(el)) {
       sizeCache.set(el, options.overflowAxis === 'horizontal' ? el[horizontal] : el[vertical]);
@@ -87,17 +93,29 @@ export function createOverflowManager(): OverflowManager {
   function occupiedSize(): number {
     const totalItemSize = visibleItemQueue
       .all()
-      .map(id => overflowItems[id].element)
+      .map((id) => overflowItems[id].element)
       .map(getOffsetSize)
-      .reduce((prev, current) => prev + current, 0);
+      .reduce(
+        (prev, current, index, { length }) =>
+          prev + current + (index < length - 1 ? options.gap : 0),
+        0
+      );
+    //- .reduce((prev, current) => prev + current, 0);
 
     const totalDividerSize = Object.entries(groupManager.groupVisibility()).reduce(
       (acc, [id, state]) =>
-        acc + (state !== 'hidden' && overflowDividers[id] ? getOffsetSize(overflowDividers[id].element) : 0),
-      0,
+        acc +
+        (state !== 'hidden' && overflowDividers[id]
+          ? getOffsetSize(overflowDividers[id].element) + options.gap
+          : 0),
+      0
     );
 
-    const overflowMenuSize = invisibleItemQueue.size() > 0 && overflowMenu ? getOffsetSize(overflowMenu) : 0;
+    //- const overflowMenuSize =
+    //   invisibleItemQueue.size() > 0 && overflowMenu ? getOffsetSize(overflowMenu) : 0;
+
+    const overflowMenuSize =
+      invisibleItemQueue.size() > 0 && overflowMenu ? getOffsetSize(overflowMenu) + options.gap : 0;
 
     return totalItemSize + totalDividerSize + overflowMenuSize;
   }
@@ -132,10 +150,14 @@ export function createOverflowManager(): OverflowManager {
     const visibleItemIds = visibleItemQueue.all();
     const invisibleItemIds = invisibleItemQueue.all();
 
-    const visibleItems = visibleItemIds.map(itemId => overflowItems[itemId]);
-    const invisibleItems = invisibleItemIds.map(itemId => overflowItems[itemId]);
+    const visibleItems = visibleItemIds.map((itemId) => overflowItems[itemId]);
+    const invisibleItems = invisibleItemIds.map((itemId) => overflowItems[itemId]);
 
-    options.onUpdateOverflow({ visibleItems, invisibleItems, groupVisibility: groupManager.groupVisibility() });
+    options.onUpdateOverflow({
+      visibleItems,
+      invisibleItems,
+      groupVisibility: groupManager.groupVisibility(),
+    });
   };
 
   const processOverflowItems = (): boolean => {
@@ -187,10 +209,10 @@ export function createOverflowManager(): OverflowManager {
   const observe: OverflowManager['observe'] = (observedContainer, userOptions) => {
     Object.assign(options, userOptions);
     observing = true;
-    Object.values(overflowItems).forEach(item => visibleItemQueue.enqueue(item.id));
+    Object.values(overflowItems).forEach((item) => visibleItemQueue.enqueue(item.id));
 
     container = observedContainer;
-    disposeResizeObserver = observeResize(container, entries => {
+    disposeResizeObserver = observeResize(container, (entries) => {
       if (!entries[0] || !container) {
         return;
       }
@@ -199,7 +221,7 @@ export function createOverflowManager(): OverflowManager {
     });
   };
 
-  const addItem: OverflowManager['addItem'] = item => {
+  const addItem: OverflowManager['addItem'] = (item) => {
     if (overflowItems[item.id]) {
       return;
     }
@@ -223,11 +245,11 @@ export function createOverflowManager(): OverflowManager {
     update();
   };
 
-  const addOverflowMenu: OverflowManager['addOverflowMenu'] = el => {
+  const addOverflowMenu: OverflowManager['addOverflowMenu'] = (el) => {
     overflowMenu = el;
   };
 
-  const addDivider: OverflowManager['addDivider'] = divider => {
+  const addDivider: OverflowManager['addDivider'] = (divider) => {
     if (!divider.groupId || overflowDividers[divider.groupId]) {
       return;
     }
@@ -240,7 +262,7 @@ export function createOverflowManager(): OverflowManager {
     overflowMenu = undefined;
   };
 
-  const removeDivider: OverflowManager['removeDivider'] = groupId => {
+  const removeDivider: OverflowManager['removeDivider'] = (groupId) => {
     if (!overflowDividers[groupId]) {
       return;
     }
@@ -251,7 +273,7 @@ export function createOverflowManager(): OverflowManager {
     }
   };
 
-  const removeItem: OverflowManager['removeItem'] = itemId => {
+  const removeItem: OverflowManager['removeItem'] = (itemId) => {
     if (!overflowItems[itemId]) {
       return;
     }
@@ -285,8 +307,8 @@ export function createOverflowManager(): OverflowManager {
     forceDispatch = true;
 
     // clear all entries
-    Object.keys(overflowItems).forEach(itemId => removeItem(itemId));
-    Object.keys(overflowDividers).forEach(dividerId => removeDivider(dividerId));
+    Object.keys(overflowItems).forEach((itemId) => removeItem(itemId));
+    Object.keys(overflowDividers).forEach((dividerId) => removeDivider(dividerId));
     removeOverflowMenu();
     sizeCache.clear();
   };

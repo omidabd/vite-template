@@ -6,13 +6,22 @@
   overflow: hidden;
 }
 
+.containerVertical {
+  min-width: 0;
+  overflow: hidden;
+}
+
 .resizableArea {
   min-width: 200px;
-  max-width: 800px;
+  max-width: 1000px;
   border: 2px solid var(--mantine-primary-color-filled);
   padding: 20px 10px 10px 10px;
   position: relative;
   resize: horizontal;
+}
+
+.resizableAreaVertical {
+  resize: vertical;
 }
 
 .resizableArea::after {
@@ -28,4 +37,8 @@
   letter-spacing: 1px;
   color: var(--mantine-color-body);
   background-color: var(--mantine-primary-color-filled);
+}
+
+.verticalItem {
+  display: block;
 }

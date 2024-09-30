@@ -57,6 +57,13 @@ export interface ObserveOptions {
    * @default 10
    */
   padding?: number;
+
+  /**
+   * gap (in px) between the children of the container
+   * @default 4
+   */
+  gap?: number;
+
   /**
    * Direction where items are removed when overflow occurs
    * @default end
