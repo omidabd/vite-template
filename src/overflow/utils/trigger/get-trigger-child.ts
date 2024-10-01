@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { isFluentTrigger } from './isFluentTrigger';
+import { isFluentTrigger } from './is-fluent-trigger';
 import type { TriggerProps } from './types';
 
 /**
@@ -25,7 +25,7 @@ import type { TriggerProps } from './types';
  * null is returned
  */
 export function getTriggerChild<TriggerChildProps>(
-  children: TriggerProps<TriggerChildProps>['children'],
+  children: TriggerProps<TriggerChildProps>['children']
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): (React.ReactElement<Partial<TriggerChildProps>> & { ref?: React.Ref<any> }) | null {
   if (!React.isValidElement<TriggerChildProps>(children)) {
@@ -35,7 +35,7 @@ export function getTriggerChild<TriggerChildProps>(
     ? getTriggerChild(
         // FIXME: This casting should be unnecessary as isFluentTrigger is a guard type method,
         // but for some reason it's failing on build
-        (children.props as TriggerProps).children,
+        (children.props as TriggerProps).children
       )
     : children;
 }

@@ -1,6 +1,6 @@
 // Replace your-framework with the name of your framework
 import type { Meta, StoryObj } from '@storybook/react';
-import { Dividers } from './Dividers';
+import { Dividers } from './dividers';
 
 const meta: Meta<typeof Dividers> = {
   component: Dividers,

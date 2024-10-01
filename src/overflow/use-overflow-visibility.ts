@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useOverflowContext } from './overflowContext';
+import { useOverflowContext } from './overflow-context';
 
 /**
  * A hook that returns the visibility status of all items and groups.
@@ -11,8 +11,11 @@ import { useOverflowContext } from './overflowContext';
  * @returns visibility status of all items and groups
  */
 export function useOverflowVisibility() {
-  const itemVisibility = useOverflowContext(ctx => ctx.itemVisibility);
-  const groupVisibility = useOverflowContext(ctx => ctx.groupVisibility);
+  const itemVisibility = useOverflowContext((ctx) => ctx.itemVisibility);
+  const groupVisibility = useOverflowContext((ctx) => ctx.groupVisibility);
 
-  return React.useMemo(() => ({ itemVisibility, groupVisibility }), [itemVisibility, groupVisibility]);
+  return React.useMemo(
+    () => ({ itemVisibility, groupVisibility }),
+    [itemVisibility, groupVisibility]
+  );
 }

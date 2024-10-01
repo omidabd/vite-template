@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { isFluentTrigger } from './isFluentTrigger';
+import { isFluentTrigger } from './is-fluent-trigger';
 import type { TriggerProps } from './types';
 
 /**
@@ -8,7 +8,7 @@ import type { TriggerProps } from './types';
  */
 export function applyTriggerPropsToChildren<TriggerChildProps>(
   children: TriggerProps<TriggerChildProps>['children'],
-  triggerChildProps: TriggerChildProps,
+  triggerChildProps: TriggerChildProps
 ): React.ReactElement | null {
   if (typeof children === 'function') {
     return children(triggerChildProps);
@@ -28,19 +28,18 @@ export function applyTriggerPropsToChildren<TriggerChildProps>(
  */
 function cloneTriggerTree<TriggerChildProps>(
   child: React.ReactNode,
-  triggerProps: TriggerChildProps,
+  triggerProps: TriggerChildProps
 ): React.ReactElement {
   if (!React.isValidElement(child) || child.type === React.Fragment) {
     throw new Error(
       'A trigger element must be a single element for this component. ' +
-        "Please ensure that you're not using React Fragments.",
+        "Please ensure that you're not using React Fragments."
     );
   }
 
   if (isFluentTrigger(child)) {
-    const grandchild = cloneTriggerTree(child.props.children, triggerProps);
+    const grandchild = cloneTriggerTree((child as any).props.children, triggerProps);
     return React.cloneElement(child, undefined, grandchild);
-  } else {
-    return React.cloneElement(child, triggerProps as TriggerChildProps & React.Attributes);
   }
+  return React.cloneElement(child, triggerProps as TriggerChildProps & React.Attributes);
 }

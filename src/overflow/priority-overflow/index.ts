@@ -1,4 +1,4 @@
-export { createOverflowManager } from './overflowManager';
+export { createOverflowManager } from './overflow-manager';
 export type {
   ObserveOptions,
   OnUpdateItemVisibility,

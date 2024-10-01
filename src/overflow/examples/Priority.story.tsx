@@ -1,7 +1,6 @@
 // Replace your-framework with the name of your framework
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button, Menu, Stack, Tooltip } from '@mantine/core';
-import { Priority } from './Priority';
+import { Priority } from './priority';
 
 const meta: Meta<typeof Priority> = {
   component: Priority,

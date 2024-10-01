@@ -1,10 +1,10 @@
-import { useOverflowContext } from './overflowContext';
+import { useOverflowContext } from './overflow-context';
 
 /**
  * @returns Number of items that are overflowing
  */
 export const useOverflowCount = () =>
-  useOverflowContext(v => {
+  useOverflowContext((v) => {
     return Object.entries(v.itemVisibility).reduce((acc, [id, visible]) => {
       if (!visible) {
         acc++;

@@ -16,7 +16,7 @@ import {
   type OverflowDividerEntry,
   type OverflowItemEntry,
   type OverflowManager,
-} from './priorityOverflow';
+} from './priority-overflow';
 import { UseOverflowContainerReturn } from './types';
 import { canUseDOM, useEventCallback, useFirstMount, useIsomorphicLayoutEffect } from './utils';
 

@@ -1,7 +1,7 @@
 import { DATA_OVERFLOW_GROUP, DATA_OVERFLOWING } from './consts';
-import { observeResize } from './createResizeObserver';
+import { observeResize } from './create-resize-observer';
 import { debounce } from './debounce';
-import { createPriorityQueue, PriorityQueue } from './priorityQueue';
+import { createPriorityQueue, PriorityQueue } from './priority-queue';
 import type {
   ObserveOptions,
   OverflowDividerEntry,

@@ -1,12 +1,12 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Button, Divider, Menu } from '@mantine/core';
-import { Overflow, OverflowProps } from '../components/Overflow';
-import { OverflowDivider } from '../components/OverflowDivider/OverflowDivider';
-import { OverflowItem, OverflowItemProps } from '../components/OverflowItem';
-import { useIsOverflowGroupVisible } from '../useIsOverflowGroupVisible';
-import { useIsOverflowItemVisible } from '../useIsOverflowItemVisible';
-import { useOverflowMenu } from '../useOverflowMenu';
+import { Button, Menu } from '@mantine/core';
+import { Overflow, OverflowProps } from '../components/overflow';
+import { OverflowDivider } from '../components/overflow-divider/overflow-divider';
+import { OverflowItem, OverflowItemProps } from '../components/overflow-item';
+import { useIsOverflowGroupVisible } from '../use-is-overflow-group-visible';
+import { useIsOverflowItemVisible } from '../use-is-overflow-item-visible';
+import { useOverflowMenu } from '../use-overflow-menu';
 import classes from './all.module.css';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

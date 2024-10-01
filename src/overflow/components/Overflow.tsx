@@ -1,10 +1,11 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { OverflowContext } from '../overflowContext';
-import { ObserveOptions, OnUpdateOverflow, OverflowGroupState } from '../priorityOverflow';
-import { updateVisibilityAttribute, useOverflowContainer } from '../useOverflowContainer';
-import { useMergedRefs } from '../utils';
-import { applyTriggerPropsToChildren, getTriggerChild } from '../utils/trigger';
+import { OverflowContext } from '../overflow-context';
+import { ObserveOptions, OnUpdateOverflow, OverflowGroupState } from '../priority-overflow';
+import { updateVisibilityAttribute, useOverflowContainer } from '../use-overflow-container';
+import { applyTriggerPropsToChildren } from '../utils/trigger/apply-trigger-props-to-children';
+import { getTriggerChild } from '../utils/trigger/get-trigger-child';
+import { useMergedRefs } from '../utils/use-merged-refs';
 import classes from './overflow.module.css';
 
 interface OverflowState {

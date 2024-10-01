@@ -1,10 +1,10 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { Button, Menu } from '@mantine/core';
-import { Overflow, OverflowProps } from '../components/Overflow';
-import { OverflowItem, OverflowItemProps } from '../components/OverflowItem';
-import { useIsOverflowItemVisible } from '../useIsOverflowItemVisible';
-import { useOverflowMenu } from '../useOverflowMenu';
+import { Overflow, OverflowProps } from '../components/overflow';
+import { OverflowItem, OverflowItemProps } from '../components/overflow-item';
+import { useIsOverflowItemVisible } from '../use-is-overflow-item-visible';
+import { useOverflowMenu } from '../use-overflow-menu';
 import classes from './all.module.css';
 
 export const Priority = (props: Omit<OverflowProps, 'children'>) => {
